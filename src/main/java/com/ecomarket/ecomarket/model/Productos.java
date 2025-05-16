@@ -1,6 +1,6 @@
 package com.ecomarket.ecomarket.model;
 
-public class productos {
+public class Productos {
     private int id_producto;
     private int id_categoria;
     private String nombre;
@@ -11,11 +11,11 @@ public class productos {
     private int stock;
 
     // Constructor vacío
-    public productos() {
+    public Productos() {
     }
 
     // Constructor con todos los campos
-    public productos(int id_producto, int id_categoria, String nombre, String descripcion, String sku, String imagen, double precio, int stock) {
+    public Productos(int id_producto, int id_categoria, String nombre, String descripcion, String sku, String imagen, double precio, int stock) {
         this.id_producto = id_producto;
         this.id_categoria = id_categoria;
         this.nombre = nombre;

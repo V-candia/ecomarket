@@ -2,7 +2,7 @@ package com.ecomarket.ecomarket.model;
 
 import java.time.LocalDate;
 
-public class clientes {
+public class Clientes {
     private int ID_cliente;
     private String nombre;
     private String correo_electronico;
@@ -11,12 +11,12 @@ public class clientes {
     private LocalDate fecha_registro;
 
     // Constructor vacío
-    public clientes() {
+    public Clientes() {
     }
 
     // Constructor con todos los campos
-    public clientes(int ID_cliente, String nombre, String correo_electronico,
-                   String telefono, String direccion, LocalDate fecha_registro) {
+    public Clientes(int ID_cliente, String nombre, String correo_electronico,
+                    String telefono, String direccion, LocalDate fecha_registro) {
         this.ID_cliente = ID_cliente;
         this.nombre = nombre;
         this.correo_electronico = correo_electronico;
