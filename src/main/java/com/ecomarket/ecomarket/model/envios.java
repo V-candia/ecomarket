@@ -1,5 +1,4 @@
 package com.ecomarket.ecomarket.model;
 
-public class Cliente {
+public class envios {
 }
-//dadda
