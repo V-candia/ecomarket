@@ -1,107 +1,39 @@
 package com.ecomarket.ecomarket.model;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "productos")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Productos {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_producto;
+
+    @Column(nullable = false)
     private int id_categoria;
+
+    @Column(nullable = false)
     private String nombre;
+
+    @Column(nullable = true)
     private String descripcion;
+
+    @Column(nullable = false, unique = true)
     private String sku;
+
+    @Column(nullable = true)
     private String imagen;
+
+    @Column(nullable = false)
     private double precio;
+
+    @Column(nullable = false)
     private int stock;
-
-    // Constructor vacío
-    public Productos() {
-    }
-
-    // Constructor con todos los campos
-    public Productos(int id_producto, int id_categoria, String nombre, String descripcion, String sku, String imagen, double precio, int stock) {
-        this.id_producto = id_producto;
-        this.id_categoria = id_categoria;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.sku = sku;
-        this.imagen = imagen;
-        this.precio = precio;
-        this.stock = stock;
-    }
-
-    // Getters y Setters
-    public int getId_producto() {
-        return id_producto;
-    }
-
-    public void setId_producto(int id_producto) {
-        this.id_producto = id_producto;
-    }
-
-    public int getId_categoria() {
-        return id_categoria;
-    }
-
-    public void setId_categoria(int id_categoria) {
-        this.id_categoria = id_categoria;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public String getSku() {
-        return sku;
-    }
-
-    public void setSku(String sku) {
-        this.sku = sku;
-    }
-
-    public String getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
-    }
-
-    public double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
-
-    @Override
-    public String toString() {
-        return "productos{" +
-                "id_producto=" + id_producto +
-                ", id_categoria=" + id_categoria +
-                ", nombre='" + nombre + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", sku='" + sku + '\'' +
-                ", imagen='" + imagen + '\'' +
-                ", precio=" + precio +
-                ", stock=" + stock +
-                '}';
-    }
 }
