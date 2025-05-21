@@ -25,7 +25,7 @@ public class ClientesController {
 
     // Obtener un cliente por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Clientes> obtenerClientePorId(@PathVariable int id) {
+    public ResponseEntity<Clientes> obtenerClientePorId(@PathVariable Long id) {
         Optional<Clientes> cliente = clientesRepository.findById(id);
         return cliente.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -39,10 +39,10 @@ public class ClientesController {
 
     // Actualizar un cliente existente
     @PutMapping("/{id}")
-    public ResponseEntity<Clientes> actualizarCliente(@PathVariable int id, @RequestBody Clientes datosActualizados) {
+    public ResponseEntity<Clientes> actualizarCliente(@PathVariable Long id, @RequestBody Clientes datosActualizados) {
         return clientesRepository.findById(id).map(cliente -> {
             cliente.setNombre(datosActualizados.getNombre());
-            cliente.setCorreo_electronico(datosActualizados.getCorreo_electronico());
+            cliente.setCorreoElectronico(datosActualizados.getCorreoElectronico());
             cliente.setTelefono(datosActualizados.getTelefono());
             cliente.setDireccion(datosActualizados.getDireccion());
             cliente.setFecha_registro(datosActualizados.getFecha_registro());
@@ -52,7 +52,7 @@ public class ClientesController {
 
     // Eliminar un cliente
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarCliente(@PathVariable int id) {
+    public ResponseEntity<Void> eliminarCliente(@PathVariable Long id) {
         if (clientesRepository.existsById(id)) {
             clientesRepository.deleteById(id);
             return ResponseEntity.noContent().build();

@@ -22,13 +22,13 @@ public class Clientes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ID_cliente;
+    private Long ID_cliente;
 
     @Column(nullable = false)
     private String nombre;
 
     @Column(nullable = false, unique = true)
-    private String correo_electronico;
+    private String correoElectronico;
 
     @Column(nullable = true)
     private String telefono;

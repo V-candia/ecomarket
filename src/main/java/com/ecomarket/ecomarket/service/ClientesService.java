@@ -25,10 +25,10 @@ public class ClientesService {
     }
 
     public Optional<Clientes> buscarPorId(int id) {
-        return clientesRepository.findById(id);
+        return clientesRepository.findById((long) id);
     }
 
     public void eliminarCliente(int id) {
-        clientesRepository.deleteById(id);
+        clientesRepository.deleteById((long) id);
     }
 }
