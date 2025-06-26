@@ -17,7 +17,7 @@ public class OrdenReposicion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idOrden;
+    private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
@@ -33,7 +33,10 @@ public class OrdenReposicion {
     @JoinColumn(name = "orden_id")
     private List<ItemOrden> items;
 
-    // Método de negocio (no se ve afectado por Lombok)
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Clientes cliente;
+
     public int calcularTotalProductos() {
         return items.stream().mapToInt(ItemOrden::getCantidadSolicitada).sum();
     }

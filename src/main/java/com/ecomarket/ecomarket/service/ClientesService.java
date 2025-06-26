@@ -2,7 +2,7 @@ package com.ecomarket.ecomarket.service;
 
 import com.ecomarket.ecomarket.model.Clientes;
 import com.ecomarket.ecomarket.repository.ClientesRepository;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +24,11 @@ public class ClientesService {
         return clientesRepository.save(cliente);
     }
 
-    public Optional<Clientes> buscarPorId(int id) {
-        return clientesRepository.findById((long) id);
+    public Optional<Clientes> buscarPorId(Long id) {
+        return clientesRepository.findById(id);
     }
 
-    public void eliminarCliente(int id) {
+    public void eliminarCliente(Long id) {
         clientesRepository.deleteById((long) id);
     }
 }

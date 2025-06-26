@@ -1,60 +1,79 @@
 package com.ecomarket.ecomarket.controller;
 
 import com.ecomarket.ecomarket.model.Clientes;
-import com.ecomarket.ecomarket.repository.ClientesRepository;
+import com.ecomarket.ecomarket.service.ClientesService;
+import com.ecomarket.ecomarket.assemblers.ClientesModelAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @RequestMapping("/api/clientes")
-@CrossOrigin(origins = "*") // Permite llamadas desde el frontend si estás usando uno
+@CrossOrigin(origins = "*")
 public class ClientesController {
 
     @Autowired
-    private ClientesRepository clientesRepository;
+    private ClientesService clientesService;
 
-    // Obtener todos los clientes
+    @Autowired
+    private ClientesModelAssembler assembler;
+
     @GetMapping
-    public List<Clientes> obtenerClientes() {
-        return clientesRepository.findAll();
+    public CollectionModel<EntityModel<Clientes>> obtenerClientes() {
+        List<EntityModel<Clientes>> clientes = clientesService.obtenerTodos().stream()
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
+
+        return CollectionModel.of(clientes,
+                linkTo(methodOn(ClientesController.class).obtenerClientes()).withSelfRel());
     }
 
-    // Obtener un cliente por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Clientes> obtenerClientePorId(@PathVariable Long id) {
-        Optional<Clientes> cliente = clientesRepository.findById(id);
-        return cliente.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<EntityModel<Clientes>> obtenerClientePorId(@PathVariable Long id) {
+        Optional<Clientes> cliente = clientesService.buscarPorId(id);
+        return cliente.map(c -> ResponseEntity.ok(assembler.toModel(c)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Crear un nuevo cliente
     @PostMapping
-    public Clientes crearCliente(@RequestBody Clientes cliente) {
-        return clientesRepository.save(cliente);
+    public ResponseEntity<EntityModel<Clientes>> crearCliente(@RequestBody Clientes cliente) {
+        Clientes guardado = clientesService.guardarCliente(cliente);
+        EntityModel<Clientes> modelo = assembler.toModel(guardado);
+        return ResponseEntity
+                .created(modelo.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(modelo);
     }
 
-    // Actualizar un cliente existente
     @PutMapping("/{id}")
-    public ResponseEntity<Clientes> actualizarCliente(@PathVariable Long id, @RequestBody Clientes datosActualizados) {
-        return clientesRepository.findById(id).map(cliente -> {
+    public ResponseEntity<EntityModel<Clientes>> actualizarCliente(@PathVariable Long id, @RequestBody Clientes datosActualizados) {
+        Optional<Clientes> clienteOpt = clientesService.buscarPorId(id);
+        if (clienteOpt.isPresent()) {
+            Clientes cliente = clienteOpt.get();
             cliente.setNombre(datosActualizados.getNombre());
             cliente.setCorreoElectronico(datosActualizados.getCorreoElectronico());
             cliente.setTelefono(datosActualizados.getTelefono());
             cliente.setDireccion(datosActualizados.getDireccion());
             cliente.setFecha_registro(datosActualizados.getFecha_registro());
-            return ResponseEntity.ok(clientesRepository.save(cliente));
-        }).orElseGet(() -> ResponseEntity.notFound().build());
+
+            Clientes actualizado = clientesService.guardarCliente(cliente);
+            return ResponseEntity.ok(assembler.toModel(actualizado));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // Eliminar un cliente
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarCliente(@PathVariable Long id) {
-        if (clientesRepository.existsById(id)) {
-            clientesRepository.deleteById(id);
+        Optional<Clientes> clienteOpt = clientesService.buscarPorId(id);
+        if (clienteOpt.isPresent()) {
+            clientesService.eliminarCliente(id);
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
